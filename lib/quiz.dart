@@ -1,4 +1,6 @@
+import 'package:adv_basics/data/questions.dart';
 import 'package:adv_basics/questions_screen.dart';
+import 'package:adv_basics/results_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:adv_basics/start_screen.dart';
 
@@ -21,6 +23,9 @@ class Quiz extends StatefulWidget {
 
 class _QuizState extends State<Quiz>{
 
+  //answers List
+  List<String> selectedAnswers = [];
+
   //initial value is the start creen
   //we are using tenaring condiction to don't use init state
   var activeScreen = 'start-screen';
@@ -32,6 +37,21 @@ class _QuizState extends State<Quiz>{
     });
   }
 
+  //function that allows to add and answer to selectedAnswers variable
+  //without reasign
+
+  void chooseAnswer(String answer){
+    selectedAnswers.add(answer);
+
+    //we're comparing the length between selectedAnswer and question on data/questions.dart
+    if (selectedAnswers.length == questions.length) {
+      setState(() {
+        selectedAnswers = [];
+        activeScreen = 'results-screen';
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -41,7 +61,14 @@ class _QuizState extends State<Quiz>{
     Widget screenWidget = StartScreen(switchScreen);
 
     if (activeScreen == 'questions-screen') {
-      screenWidget = const QuestionsScreen();
+      screenWidget = QuestionsScreen(
+        onSelectedAnswer: chooseAnswer,
+      );
+    }
+
+    //when the condiction is true we're redirecting to results Screen
+    if (activeScreen == 'results-screen') {
+      screenWidget = const ResultScreen();
     }
 
     return  MaterialApp(
