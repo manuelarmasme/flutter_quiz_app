@@ -37,6 +37,14 @@ class _QuizState extends State<Quiz>{
     });
   }
 
+
+  void restartQuiz (){
+    setState(() {
+      selectedAnswers = [];
+      activeScreen = 'questions-screen';
+    });
+  }
+
   //function that allows to add and answer to selectedAnswers variable
   //without reasign
 
@@ -46,7 +54,6 @@ class _QuizState extends State<Quiz>{
     //we're comparing the length between selectedAnswer and question on data/questions.dart
     if (selectedAnswers.length == questions.length) {
       setState(() {
-        selectedAnswers = [];
         activeScreen = 'results-screen';
       });
     }
@@ -68,7 +75,10 @@ class _QuizState extends State<Quiz>{
 
     //when the condiction is true we're redirecting to results Screen
     if (activeScreen == 'results-screen') {
-      screenWidget = const ResultScreen();
+      screenWidget = ResultScreen(
+        chooseAnswer: selectedAnswers,
+        onRestart: restartQuiz,
+      );
     }
 
     return  MaterialApp(
